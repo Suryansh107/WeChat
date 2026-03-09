@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import Button from 'react-bootstrap/Button';
 import { MessageCircle } from "lucide-react";
 
 const Index = () => {

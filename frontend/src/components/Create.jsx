@@ -88,7 +88,7 @@ const Create = () => {
           </span>
         </div>
 
-        <button className="create-btn" type="submit">Sign Up</button>
+        <button className="create-btn" type="submit" onClick={()=> navigate("/People")}>Sign Up</button>
       </form>
 
       <div className="create-footer">

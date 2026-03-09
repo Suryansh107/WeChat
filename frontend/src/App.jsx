@@ -7,7 +7,8 @@ import { useState } from 'react'
 import Home from './components/Home'
 import Create from './components/Create'
 import Login from './components/Login'
-
+import People from './components/People'
+import 'bootstrap/dist/css/bootstrap.min.css'
 function App() {
   return (
     <BrowserRouter>
@@ -15,6 +16,7 @@ function App() {
       <Route path="/" element={<Home/>} />
       <Route path="Create" element={<Create/>} />
       <Route path="Login" element={<Login/>}/>
+      <Route path="People" element={<People/>}/>
      </Routes>
     </BrowserRouter>
   )

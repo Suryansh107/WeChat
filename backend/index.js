@@ -23,10 +23,25 @@ app.get("/",async(req,res)=>{
 })
 
 app.post("/Create",async(req,res)=>{
+try {
   const user=req.body;
-  db.query("INSERT INTO users(name,mobile_no,password,country) VALUES($1,$2,$3,$4)",)
-
-})
+  await db.query("INSERT INTO users(name,mobile_no,password,country) VALUES($1,$2,$3,$4)",[user.name,user.mobile_no,user.country,user.password]);
+  res.redirect("/chats");
+}catch(err){
+  console.log(err);
+  res.send("Failed");
+}
+});
+app.get("/chats",async(req,res)=>{
+  try{
+    const id=req.body.id;
+    const result=await db.query("SELECT rooms.id, rooms.name, rooms.is_group FROM room_members JOIN rooms ON room_members.room_id = rooms.id WHERE id=$1",[id]);
+    res.json(result.rows);
+  }catch(err){
+    console.log(err);
+    res.send("Failed");
+  }
+});
 
 
 
