@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { MessageCircle, User, Phone, Lock, Eye, EyeOff, ChevronLeft, Globe } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
 import "./Create.css";
 
 const Create = () => {
@@ -10,7 +11,6 @@ const Create = () => {
   const [fullName,setfullName]=useState("");
   const [password,setPassword]=useState("");
   const [telephone,setTelephone]=useState("");
-  const [users, setUsers] = useState([]);
   const [nameError, setNameError] = useState("");
   const [telError, setTelError] = useState("");
   const [passError, setPassError] = useState("");
@@ -30,25 +30,31 @@ const Create = () => {
 
       <h1 className="create-title">Sign Up for WeChat</h1>
 
-      <form className="create-form" onSubmit={(e) => {
+      <form className="create-form" onSubmit={async(e) => {
         e.preventDefault();
         if(!agreed){
           alert("Accept T&C");
           return;
         }
-        navigate("/People");
+        if(telError || passError) return;
         const newUser = {
-          fullName: fullName,
-          password: password,
-          telephone: telephone,
-          country:country
+          name: fullName,
+          mobile_no: telephone,
+          country:country,
+          password: password
+          
         };
         console.log(newUser);
-        setUsers([...users, newUser]);
-
-        setfullName("");
-        setPassword("");
-        setTelephone("");
+        try {
+            await axios.post('http://localhost:3000/Create', newUser);
+            navigate("/People");
+            setfullName("");
+            setPassword("");
+            setTelephone("");
+          } catch(err) {
+            alert("Registration failed, try again");
+            console.log(err);
+          }
         }}>
         <div className="create-field">
           <label className="create-label">Full Name</label>
