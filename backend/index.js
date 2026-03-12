@@ -48,8 +48,36 @@ app.get("/People",async(req,res)=>{
     res.status(500).json({ message: "Failed" });
   }
 });
+app.get("/People/search",async(req,res)=>{
+  try{
+    const tel=req.query.query;
+    const ress=await db.query("SELECT id,name FROM users WHERE mobile_no=$1",[tel]);
+    res.json(ress.rows);
+  }catch(err){
+    console.log(err);
+    res.status(500).json({ message: "Failed" });
+  }
+})
+app.post("/People/AddPeople", async (req, res) => {
+  try {
+    const { otherUserId, currentUserId } = req.body;
 
+    const roomResult = await db.query(
+      "INSERT INTO rooms(is_group) VALUES(false) RETURNING *"
+    );
+    const room = roomResult.rows[0];
 
+    await db.query(
+      "INSERT INTO room_members(room_id, user_id) VALUES($1, $2), ($1, $3)",
+      [room.id, currentUserId, otherUserId]
+    );
+
+    res.json({ message: "DM created successfully" });
+  } catch(err) {
+    console.log(err);
+    res.status(500).json({ message: "Failed" });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
