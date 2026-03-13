@@ -61,9 +61,14 @@ app.get("/People/search",async(req,res)=>{
 app.post("/People/AddPeople", async (req, res) => {
   try {
     const { otherUserId, currentUserId } = req.body;
-
+    const userResult = await db.query(
+      "SELECT name FROM users WHERE id = $1",
+      [otherUserId]
+    );
+    const otherUserName = userResult.rows[0].name;
     const roomResult = await db.query(
-      "INSERT INTO rooms(is_group) VALUES(false) RETURNING *"
+      "INSERT INTO rooms(name, is_group) VALUES($1, false) RETURNING *",
+      [otherUserName]
     );
     const room = roomResult.rows[0];
 
@@ -78,6 +83,28 @@ app.post("/People/AddPeople", async (req, res) => {
     res.status(500).json({ message: "Failed" });
   }
 });
+
+app.post("/People/CreateRoom",async(req,res)=>{
+  try{
+    const {roomName,currUserId} = req.body;
+    const roomRes=await db.query(
+     "INSERT INTO rooms(name,is_group,created_by) VALUES($1,true,$2) RETURNING *",
+     [roomName,currUserId] 
+    );
+    const room=roomRes.rows[0];
+    await db.query(
+      "INSERT INTO room_members(room_id,user_id) VALUES($1,$2)",
+      [room.id,currUserId]
+    );
+    res.json({message : "Group Crested Successfully"})
+
+
+  }catch(err){
+    console.log(err);
+  }
+
+});
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

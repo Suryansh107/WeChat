@@ -12,7 +12,7 @@ const People = () => {
   const [showCreateRoom, setShowCreateRoom] = useState(false);
   const [userName,setUserName]=useState("");
   const [result, setResult] = useState(null);
-  useEffect(() => {
+  const [roomName,setRoomName] = useState("");
     const fetchUsers = async () => {
       try {
         const res = await axios.get('http://localhost:3000/People?id=6');
@@ -21,6 +21,7 @@ const People = () => {
         console.log(err);
       }
     }
+  useEffect(() => {
     fetchUsers();
   }, []);
 
@@ -78,8 +79,9 @@ const People = () => {
                 : <p onClick={async()=>{
                   await axios.post('http://localhost:3000/People/AddPeople', {
                   otherUserId: result[0].id,
-                  currentUserId: 6  
+                  currentUserId: 6 //change 
                 });
+                fetchUsers(); 
                 setShowAddPeople(false);
                 setResult(null);
                 }}>{result[0].name}</p>
@@ -107,8 +109,23 @@ const People = () => {
         <div className="modal-overlay" onClick={() => setShowCreateRoom(false)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <h3>Create Room</h3>
-            <input type="text" placeholder="Room name" />
-            <button>Create</button>
+            <input type="text" placeholder="Room name" onChange={(e)=>{
+              setRoomName(e.target.value);
+            }} />
+            <button onClick={async()=>{
+              try{
+                await axios.post(`http://localhost:3000/People/CreateRoom`,{
+                  roomName:roomName,
+                  currUserId : 6 //change
+                });
+                fetchUsers(); 
+                alert("Room Created succesfully");
+                setShowCreateRoom(false);
+                setRoomName("");
+              }catch(err){
+                console.log(err);
+              }
+            }}>Create</button>
             <button onClick={() => setShowCreateRoom(false)}>Close</button>
           </div>
         </div>
