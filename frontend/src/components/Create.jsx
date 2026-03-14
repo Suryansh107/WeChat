@@ -46,11 +46,14 @@ const Create = () => {
         };
         console.log(newUser);
         try {
-            await axios.post('http://localhost:3000/Create', newUser);
+            await axios.post('http://localhost:3000/Create', newUser,{
+              withCredentials:true
+            });
             navigate("/People");
             setfullName("");
             setPassword("");
             setTelephone("");
+            setCountry("India");
           } catch(err) {
             alert("Registration failed, try again");
             console.log(err);

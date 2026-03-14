@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { MessageCircle, Phone, Lock, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Login.css";
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-
+  const [userTelephone,setUserTelephone] =useState("");
+  const [userPassword,setUserPassword]=useState("");
   return (
     <div className="login-container">
       <div className="login-icon-wrapper">
@@ -23,7 +25,9 @@ const Login = () => {
           <label className="login-label">Mobile Number</label>
           <div className="login-input-wrapper">
             <Phone />
-            <input className="login-input" type="tel" placeholder="+1 555-0123" />
+            <input className="login-input" type="tel" placeholder="+1 555-0123" onChange={(e)=>{
+              setUserTelephone(e.target.value);
+            }} />
           </div>
         </div>
 
@@ -35,18 +39,38 @@ const Login = () => {
               className="login-input"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
+              onChange={(e)=>{
+                setUserPassword(e.target.value);
+              }}
             />
             <button
               type="button"
               style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() => {
+                setShowPassword(!showPassword);
+              }}
             >
               {showPassword ? <EyeOff /> : <Eye />}
             </button>
           </div>
         </div>
 
-        <button className="login-btn" type="submit">Log In</button>
+        <button className="login-btn" type="submit" onClick={async()=>{
+          
+          try{
+            await axios.post(`http://localhost:3000/Login`,{
+            mobile_no: userTelephone,
+            password: userPassword
+          },{ withCredentials : true}
+          )
+          navigate("/People");
+          setUserPassword("");      
+          setUserTelephone("");
+          }catch(err){
+            alert("Wrong number or password");
+            console.log(err);
+          }
+        }}>Log In</button>
 
         <div className="login-links">
           <button className="login-link" type="button">Forgot Password?</button>

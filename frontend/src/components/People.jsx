@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useCallback } from "react";
 import { Users, MessageCircle, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -13,17 +13,35 @@ const People = () => {
   const [userName,setUserName]=useState("");
   const [result, setResult] = useState(null);
   const [roomName,setRoomName] = useState("");
-    const fetchUsers = async () => {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/People?id=6');
+        const res = await axios.get('http://localhost:3000/me', {
+          withCredentials: true
+        });
+        setCurrentUser(res.data.user); // store logged in user
+      } catch(err) {
+        navigate("/Login"); 
+      }
+    }
+    checkAuth();
+  }, []);
+
+  const fetchUsers = useCallback(async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/People',{
+          withCredentials:true
+        });
         setUsers(res.data);
       } catch(err) {
         console.log(err);
       }
-    }
+    },[])
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
 
   return (
     <div className="people-layout">
@@ -52,8 +70,10 @@ const People = () => {
             : users.map((user) => (
                 <CreateCard
                   key={user.id}
+                  id={user.id}
                   avatar={user.avatar}
                   name={user.name}
+                  is_group={user.is_group}
                   tel={user.mobile_no}
                 />
               ))
@@ -79,8 +99,8 @@ const People = () => {
                 : <p onClick={async()=>{
                   await axios.post('http://localhost:3000/People/AddPeople', {
                   otherUserId: result[0].id,
-                  currentUserId: 6 //change 
-                });
+                  //currentUserId: 6 //change 
+                },{withCredentials : true});
                 fetchUsers(); 
                 setShowAddPeople(false);
                 setResult(null);
@@ -88,7 +108,7 @@ const People = () => {
               )}
             <button onClick={async()=>{
               try{
-                const res=await axios.get(`http://localhost:3000/People/search?query=${userName}`);
+                const res=await axios.get(`http://localhost:3000/People/search?query=${userName}`,{withCredentials : true});
                 setResult(res.data)
               }catch(err){
                 console.log(err);
@@ -116,10 +136,10 @@ const People = () => {
               try{
                 await axios.post(`http://localhost:3000/People/CreateRoom`,{
                   roomName:roomName,
-                  currUserId : 6 //change
-                });
+                  //currUserId : 6 //change
+                },{withCredentials : true});
                 fetchUsers(); 
-                alert("Room Created succesfully");
+                //alert("Room Created succesfully");
                 setShowCreateRoom(false);
                 setRoomName("");
               }catch(err){
