@@ -149,7 +149,7 @@ app.get("/People/search",async(req,res)=>{
 
 app.post("/People/AddPeople", async (req, res) => {
   try {
-    const  otherUserId  = req.body;
+    const  {otherUserId}  = req.body;
     const  currentUserId=req.user.id;
     const userResult = await db.query(
       "SELECT name FROM users WHERE id = $1",
@@ -176,7 +176,7 @@ app.post("/People/AddPeople", async (req, res) => {
 
 app.post("/People/CreateRoom",async(req,res)=>{
   try{
-    const roomName = req.body;
+    const {roomName} = req.body;
     const currUserId=req.user.id;
     const roomRes=await db.query(
      "INSERT INTO rooms(name,is_group,created_by) VALUES($1,true,$2) RETURNING *",

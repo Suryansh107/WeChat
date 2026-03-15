@@ -136,3 +136,101 @@ people-layout {
   gap: 10px;
   margin-bottom: 16px;
 }
+.people-card-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7c6b;
+  flex-shrink: 0;
+}
+
+.people-card-add-btn {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  border: none;
+  color: #1e8c3e;
+  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(30, 140, 62, 0.12);
+}
+
+.people-card-add-btn:hover {
+  background: linear-gradient(135deg, #1e8c3e, #43a047);
+  color: #fff;
+  transform: scale(1.1);
+  box-shadow: 0 4px 14px rgba(30, 140, 62, 0.25);
+}
+
+.people-content-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2rem;
+  color: #1a3a1a;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.people-content-title::before {
+  content: '';
+  width: 4px;
+  height: 28px;
+  background: linear-gradient(180deg, #1e8c3e, #43a047);
+  border-radius: 4px;
+}
+
+.people-create-room-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #1e8c3e, #2e9e4e);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.65rem 1.25rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 16px rgba(30, 140, 62, 0.2);
+  margin-bottom: 1.5rem;
+  width: 100%;
+  max-width: 500px;
+  justify-content: center;
+  flex:1
+}
+
+.people-create-room-btn:hover {
+  background: linear-gradient(135deg, #176d30, #1e8c3e);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 140, 62, 0.3);
+}
+.people-layout {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #e0f2f1 100%);
+}
+
+.people-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 16px;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* .people-actions .people-create-room-btn {
+  flex: 1;
+} */

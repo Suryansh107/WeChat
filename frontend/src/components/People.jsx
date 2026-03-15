@@ -60,8 +60,8 @@ const People = () => {
         <h2 className="people-content-title">People</h2>
 
         <div className="people-actions">
-          <button onClick={() => setShowAddPeople(true)}>Add People</button>
-          <button onClick={() => setShowCreateRoom(true)}>Create Room</button>
+          <button className="people-create-room-btn" onClick={() => setShowAddPeople(true)}>Add People</button>
+          <button className="people-create-room-btn" onClick={() => setShowCreateRoom(true)}>Create Room</button>
         </div>
 
         <div className="people-cards-list">
@@ -101,6 +101,7 @@ const People = () => {
                   otherUserId: result[0].id,
                   //currentUserId: 6 //change 
                 },{withCredentials : true});
+                console.log("req rec");
                 fetchUsers(); 
                 setShowAddPeople(false);
                 setResult(null);
